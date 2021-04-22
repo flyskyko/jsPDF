@@ -1,7 +1,7 @@
 /** @license
  *
  * jsPDF - PDF Document creation from JavaScript
- * Version 2.3.1 Built on 2021-03-08T15:44:11.672Z
+ * Version 2.3.1 Built on 2021-04-22T05:38:22.374Z
  *                      CommitID 00000000
  *
  * Copyright (c) 2010-2020 James Hall <james@parall.ax>, https://github.com/MrRio/jsPDF
@@ -6636,7 +6636,10 @@
 
     var endFormObject = function(key) {
       // only add it if it is not already present (the keys provided by the user must be unique!)
-      if (renderTargetMap[key]) return;
+      if (renderTargetMap[key]) {
+        renderTargetStack.pop().restore();
+        return;
+      }
 
       // save the created xObject
       var newXObject = new RenderTarget();
@@ -13659,6 +13662,10 @@
       });
     };
 
+    Context2D.prototype.setLineDash = function (dashArray) {
+      this.pdf.setLineDash(dashArray);
+    };
+
     Context2D.prototype.fill = function() {
       pathPreProcess.call(this, "fill", false);
     };
@@ -14689,7 +14696,7 @@
       var strokeStyle = this.strokeStyle;
       var lineCap = this.lineCap;
       var oldLineWidth = this.lineWidth;
-      var lineWidth = oldLineWidth * this.ctx.transform.scaleX;
+      var lineWidth = Math.abs(oldLineWidth * this.ctx.transform.scaleX);
       var lineJoin = this.lineJoin;
 
       var origPath = JSON.parse(JSON.stringify(this.path));
