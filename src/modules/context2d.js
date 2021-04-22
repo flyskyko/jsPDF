@@ -652,6 +652,10 @@ import {
     });
   };
 
+  Context2D.prototype.setLineDash = function (dashArray) {
+    this.pdf.setLineDash(dashArray);
+  };
+
   Context2D.prototype.fill = function() {
     pathPreProcess.call(this, "fill", false);
   };
